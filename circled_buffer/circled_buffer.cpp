@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 
 #define BufferSize 5                                                            // size of buffer
 
@@ -11,33 +11,68 @@ struct {                                                                        
 }buffer;
 
 
-void put() {                                                                    // data entry
-    if (buffer.isFull != 1) {
-        system("cls");
-        std::cout << "Enter data [" << buffer.writeIndex + 1 << "]" << std::endl;
-        std::cin >> buffer.data[buffer.writeIndex];
-        buffer.writeIndex++;
-    }
-    else {
+
+bool putBuf() {
+
+    if (buffer.isFull) {
         system("cls");
         std::cout << "Buffer is full" << std::endl;
-
+        return 0;
     }
-    
+
+    if (buffer.writeIndex >= BufferSize)
+        buffer.writeIndex = 0;
+
+    if (buffer.isEmpty) {
+
+        buffer.isEmpty = 0;
+
+        system("cls");
+        std::cout << "Enter data [" << buffer.writeIndex + 1 << "]" << std::endl;
+        std::cin >> buffer.data[buffer.writeIndex++];
+
+        if (buffer.writeIndex == buffer.readIndex)
+            buffer.isFull = 1;
+
+        return 1;
+    }
+
+    system("cls");
+    std::cout << "Enter data [" << buffer.writeIndex + 1 << "]" << std::endl;
+    std::cin >> buffer.data[buffer.writeIndex++];
+
+    if (buffer.writeIndex == buffer.readIndex)
+        buffer.isFull = 1;
+
+    return 1;
+
+
 }
 
-void get() {                                                                    // data output
-    if (buffer.isEmpty != 1) {
-        system("cls");
-        std::cout << '[' << buffer.readIndex + 1 << "] : ";
-        std::cout << buffer.data[buffer.readIndex] << std::endl;
-        buffer.readIndex++;
-    }
-    else {
+bool getBuf() {
+
+    if (buffer.isEmpty) {
         system("cls");
         std::cout << "Buffer is empty" << std::endl;
-
+        return 0;
     }
+
+    if (buffer.readIndex >= BufferSize)
+        buffer.readIndex = 0;
+
+    buffer.isFull = 0;
+
+    system("cls");
+    std::cout << '[' << buffer.readIndex + 1 << "] : ";
+    std::cout << buffer.data[buffer.readIndex++] << std::endl;
+
+    if (buffer.readIndex == buffer.writeIndex)
+        buffer.isEmpty = 1;
+
+    return 1;
+
+
+
 }
 
 int main()
@@ -47,34 +82,28 @@ int main()
 
         int command; 
 
-
-        if (buffer.writeIndex >= 5)                                             // conditions
-            buffer.isFull = 1;
-        
-        else {
-            buffer.isFull = 0;
-            if (buffer.readIndex == 5)
-                buffer.writeIndex = 0;
-        }
-
-        if (buffer.writeIndex <= buffer.readIndex || buffer.readIndex == 5) {
-            buffer.isEmpty = 1;
-            buffer.writeIndex = 0;
-            buffer.readIndex = 0;
-        }
-        else 
-            buffer.isEmpty = 0;
-
-
         do {                                                                    // inputing command     
             std::cout << "Enter the command (0 - input data, 1 - output data)" << std::endl;
             std::cin >> command;
         } while (command != 0 && command != 1);
 
         if (command == 0)
-            put();
+            putBuf();
         else if (command == 1)
-            get();  
+            getBuf();  
+
+
+        /*std::cout << std::endl << std::endl;                                   // debugging
+        for (int i = 0; i < BufferSize; i++)
+            std::cout << buffer.data[i] << ' ' << std::endl;
+        std::cout << "Is empty " << buffer.isEmpty << std::endl;
+        std::cout << "Is full " << buffer.isFull << std::endl;
+        std::cout << "Read index " << buffer.readIndex << std::endl;
+        std::cout << "Write index " << buffer.writeIndex << std::endl;*/
+
+
+
     }
 
+    
 }
