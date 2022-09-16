@@ -1,4 +1,4 @@
-# Ring-buffer
+# Circular-buffer
 I watched video on Youtube about animation in programming, and buffer was mentioned there, so I was inspired and wanted to try to do this kind of this data structure. During searching information about this structure, I found out that this structure is used in many areas of programming.
 This data structure helps buffering different type of data streams. In my case integers were used for the data like the most common data type.
 
