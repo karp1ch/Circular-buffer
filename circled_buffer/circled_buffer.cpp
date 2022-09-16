@@ -2,13 +2,13 @@
 
 #define BufferSize 5                                                            // size of buffer
 
-typedef struct buf{                                                                        // stucture of buffer
+typedef struct CircularBuffer{                                                                        // stucture of buffer
     int readIndex = 0;
     int writeIndex = 0;
     bool isFull = 0;
     bool isEmpty = 1;
     int data[BufferSize];
-}CircularBuffer;
+};
 
 
 
